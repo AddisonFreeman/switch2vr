@@ -25,6 +25,22 @@
  * Domain Path:       /languages
  */
 
+add_action('admin_menu', 'switch2VR_admin');
+
+function switch2VR_admin(){
+        add_menu_page( 'Switch 2 VR', 'Switch 2 VR', 'manage_options', 'switch2vr-admin-page', 'switch2vr_admin_page_init' );
+}
+ 
+function switch2vr_admin_page_init(){
+	echo "<h1> Switch2VR Admin Page </h1>";
+	// echo '<div id="wrapper"><input id="fileUpload" type="file" /><br /><div id="image-holder"></div></div>';
+	include 'upload.html';
+	// echo php_ini_loaded_file();
+	// echo phpinfo();
+	// exec("./krpano/krpanotools makepano -config=./krpano/templates/vtour-normal.config ./krpano-demos/cube.jpg");
+}
+
+
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
