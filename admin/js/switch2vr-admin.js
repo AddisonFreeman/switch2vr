@@ -68,16 +68,54 @@
 			e.preventDefault();
 
 			// console.log(e.target.files);
+			// $.ajax({
+			// 	type: "POST",
+			// 	url: "pano-upload.php",
+			// 	data: $("#panoForm").serialize(),
+			// 	success: function(data) {
+			// 		// console.log("form submit sucess, data: ");
+			// 		// console.log(data);
+			// 	}
+			// });
 
 			var files = e.target.files;
-			for (var i = 0, file; file = files[i]; i++) {
-				console.log(file);
-			}
+			
 
-			var uploadFile = function(file, path) {
-				console.log(path, file);
-				// handle file uploading
-			};
+				var fd = new FormData();
+				var xhr = new XMLHttpRequest();
+
+				xhr.open("POST", "pano-upload.php", true);
+				
+				xhr.onreadystatechange = function() {
+					if (xhr.readyState == 4 && xhr.status == 200) {
+						console.log(xhr.responseText);
+					}
+				}
+
+				for (var i = 0, file; file = files[i]; i++) {
+					// console.log(file);
+					fd.append(file.name, file);
+				}
+				
+				xhr.upload.addEventListener("progress", function(e) {
+					// console.log(Math.round(e.loaded / e.total * 100) +"% loaded");
+				});
+				xhr.send(fd);
+			
+		});
+
+		var panoForm = document.getElementById('panoForm');
+
+		panoForm.addEventListener('submit', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+
+			var files = document.getElementById('files').files;
+
+			console.log(files);
+			
+
+
 		});
 	});
 

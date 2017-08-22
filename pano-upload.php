@@ -1,23 +1,32 @@
 <?php
 // $pano_name = $_POST["panoname"];
-
-// echo $pano_name;
-
-// var_dump($_FILES);
+// echo $pano_name; //sanitize to only lowercase dir name
+// mkdir(__DIR__ . "/../wp-content/vtour/projects/" . $pano_name);
+// //upload entire folder into above directory
 
 
 
 // $count = 0;
-// if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+	echo "start single file upload";
+	echo json_encode($_FILES);
+	echo "end single file upload";
+	// echo("xhr received");
+	// echo($_SERVER['HTTP_X_FILENAME']);
+
+	// foreach ($_SERVER as $key => $value) {
+	// 	echo($key." : ".$value."; ");
+	// }
+
 //     foreach ($_FILES['files']['name'] as $i => $name) {
 // 		echo "<p>" . $name . "</p>";
 // //         if (strlen($_FILES['files']['name'][$i]) > 1) {
-// //             if (move_uploaded_file($_FILES['files']['tmp_name'][$i], __DIR__ . "/../wp-content/vtour/projects/" . $pano_name . "/" . $name)) {
+            // if (move_uploaded_file($_FILES['files']['tmp_name'][$i], __DIR__ . "/../wp-content/vtour/projects/" . $pano_name . "/" . $name)) {
 // //                 $count++;
 // //             }
 // //         }
 //     }
-// }
+}
 
 // mkdir(__DIR__ . "/../wp-content/vtour/projects/" . $pano_name);
 // $target_dir = __DIR__ . "/../wp-content/vtour/projects/" . $pano_name . "/";
