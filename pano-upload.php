@@ -5,27 +5,48 @@
 // //upload entire folder into above directory
 
 
-
-// $count = 0;
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-	echo "start single file upload";
-	echo json_encode($_FILES);
-	echo "end single file upload";
-	// echo("xhr received");
-	// echo($_SERVER['HTTP_X_FILENAME']);
+	
+	// echo count($_FILES);
+	
+	// move_uploaded_file($_FILES['filename']['tmp_name'], __DIR__ . "/../wp-content/vtour/projects/test/" . $_FILES['filename']['name']);
+	
+	// move_uploaded_file($_FILES['file_0']['tmp_name'], __DIR__ . "/../wp-content/vtour/projects/test/".$_FILES['file_0']['name']);
+	// move_uploaded_file($_FILES['file_1']['tmp_name'], __DIR__ . "/../wp-content/vtour/projects/test/".$_FILES['file_1']['name']);
 
-	// foreach ($_SERVER as $key => $value) {
-	// 	echo($key." : ".$value."; ");
-	// }
+	// echo $_FILES['file_0']['filename'];
 
-//     foreach ($_FILES['files']['name'] as $i => $name) {
-// 		echo "<p>" . $name . "</p>";
-// //         if (strlen($_FILES['files']['name'][$i]) > 1) {
-            // if (move_uploaded_file($_FILES['files']['tmp_name'][$i], __DIR__ . "/../wp-content/vtour/projects/" . $pano_name . "/" . $name)) {
-// //                 $count++;
-// //             }
-// //         }
-//     }
+	$paths = explode("###",rtrim($_POST['paths'],"###"));
+
+	foreach ($paths as $path) {
+		$file_from_path = ltrim(substr($path, strrpos($path, "/")), "/");
+		echo $file_from_path;
+		echo " ";		
+	}
+
+	// $arr = [];
+	// array_push($arr, "l1_b_2_1.jpg");
+
+    foreach ($_FILES as $i => $file) {
+        if (strlen($_FILES[$i]['name']) > 1) {
+        	// $file_index = array_search($file['name'], $paths); //find path for given file
+        	$file_index = array_search($file['name'], $arr); //find path for given file
+        	echo $file_index;
+        	// echo $file_index;
+        	// echo $file_path;
+        	// echo " ";
+        	$dir_path = substr($file_path, 0, strrpos($file_path, "/") -1);
+			if(!is_dir(__DIR__."/../wp-content/vtour/projects/test/".$dir_path)) {
+				mkdir(__DIR__."/../wp-content/vtour/projects/test/".$dir_path, 0777, true);
+				if (move_uploaded_file($_FILES[$i]['tmp_name'], __DIR__ . "/../wp-content/vtour/projects/test/".$file_path)) {
+                // echo 'uploaded '.$i.' at '.$file_path;
+            	}
+			}
+
+            
+        }
+    }
+
 }
 
 // mkdir(__DIR__ . "/../wp-content/vtour/projects/" . $pano_name);

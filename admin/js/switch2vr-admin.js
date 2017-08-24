@@ -79,7 +79,9 @@
 			// });
 
 			var files = e.target.files;
+			var paths = "";
 			
+			// console.log(files);
 
 				var fd = new FormData();
 				var xhr = new XMLHttpRequest();
@@ -88,14 +90,23 @@
 				
 				xhr.onreadystatechange = function() {
 					if (xhr.readyState == 4 && xhr.status == 200) {
-						console.log(xhr.responseText);
+						// console.log(xhr.responseText);
 					}
 				}
 
 				for (var i = 0, file; file = files[i]; i++) {
-					// console.log(file);
-					fd.append(file.name, file);
+					
+					// if(~file.webkitRelativePath.indexOf(".tiles")) { //only upload files inside a .tiles folder
+						// console.log(file.webkitRelativePath);	
+						paths += file.webkitRelativePath+"###";
+						fd.append("file_"+i, file);	
+					// }
 				}
+				// console.log(paths);
+				// console.log("server: ");
+				fd.append("paths", paths);
+
+
 				
 				xhr.upload.addEventListener("progress", function(e) {
 					// console.log(Math.round(e.loaded / e.total * 100) +"% loaded");
