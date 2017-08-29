@@ -7,46 +7,29 @@
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 	
-	// echo count($_FILES);
-	
-	// move_uploaded_file($_FILES['filename']['tmp_name'], __DIR__ . "/../wp-content/vtour/projects/test/" . $_FILES['filename']['name']);
-	
-	// move_uploaded_file($_FILES['file_0']['tmp_name'], __DIR__ . "/../wp-content/vtour/projects/test/".$_FILES['file_0']['name']);
-	// move_uploaded_file($_FILES['file_1']['tmp_name'], __DIR__ . "/../wp-content/vtour/projects/test/".$_FILES['file_1']['name']);
-
-	// echo $_FILES['file_0']['filename'];
-
 	$paths = explode("###",rtrim($_POST['paths'],"###"));
 
+	$path_index_array = []; //array to hold index of filenames from path array
+	
 	foreach ($paths as $path) {
 		$file_from_path = ltrim(substr($path, strrpos($path, "/")), "/");
-		echo $file_from_path;
-		echo " ";		
+		array_push($path_index_array, $file_from_path);
 	}
-
-	// $arr = [];
-	// array_push($arr, "l1_b_2_1.jpg");
 
     foreach ($_FILES as $i => $file) {
         if (strlen($_FILES[$i]['name']) > 1) {
-        	// $file_index = array_search($file['name'], $paths); //find path for given file
-        	$file_index = array_search($file['name'], $arr); //find path for given file
-        	echo $file_index;
-        	// echo $file_index;
-        	// echo $file_path;
-        	// echo " ";
-        	$dir_path = substr($file_path, 0, strrpos($file_path, "/") -1);
-			if(!is_dir(__DIR__."/../wp-content/vtour/projects/test/".$dir_path)) {
+        	//TODO: filter out hidden files, 
+        	$file_index = array_search($file['name'], $path_index_array); //find path for given file
+        	$dir_path = substr($paths[$file_index], 0, strpos($paths[$file_index], $file['name']));	//get just the directory from the current file in
+
+			if(!is_dir(__DIR__."/../wp-content/vtour/projects/test/".$dir_path)) { //don't make dir if end file
 				mkdir(__DIR__."/../wp-content/vtour/projects/test/".$dir_path, 0777, true);
-				if (move_uploaded_file($_FILES[$i]['tmp_name'], __DIR__ . "/../wp-content/vtour/projects/test/".$file_path)) {
-                // echo 'uploaded '.$i.' at '.$file_path;
+				if (move_uploaded_file($_FILES[$i]['tmp_name'], __DIR__ . "/../wp-content/vtour/projects/test/".$dir_path.$file['name'])) {
+                	echo 'uploaded '.$file['name'].' at '.'\'wp-content/vtour/projects/test/'.$dir_path.'\'';
             	}
 			}
-
-            
         }
     }
-
 }
 
 // mkdir(__DIR__ . "/../wp-content/vtour/projects/" . $pano_name);
