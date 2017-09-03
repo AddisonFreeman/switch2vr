@@ -43,18 +43,6 @@
 			alert('XHR HTTP Requests not supported by your browser');
 		}
 
-		// var dropDiv = document.getElementById('dropDiv');
-
-		// dropDiv.addEventListener('dragover', function(event) {
-		// 	event.preventDefault();
-		// });
-
-		// dropDiv.addEventListener('drop', function (e) {
-		// 	e.stopPropagation();
-		// 	e.preventDefault();
-		// 	// var files = e.target.files || e.dataTransfer.files;
-		// 	console.log(e.dataTransfer.files);
-		// });
 		
 		var filesEl = document.getElementById('files');
 
@@ -67,67 +55,40 @@
 			e.stopPropagation();
 			e.preventDefault();
 
-			// console.log(e.target.files);
-			// $.ajax({
-			// 	type: "POST",
-			// 	url: "pano-upload.php",
-			// 	data: $("#panoForm").serialize(),
-			// 	success: function(data) {
-			// 		// console.log("form submit sucess, data: ");
-			// 		// console.log(data);
-			// 	}
-			// });
-
 			var files = e.target.files;
-			var paths = "";
+			// var paths = "";
 			
-			// console.log(files);
+			var fd = new FormData();
+			var xhr = new XMLHttpRequest();
 
-				var fd = new FormData();
-				var xhr = new XMLHttpRequest();
+			xhr.open("POST", "pano-upload.php", true);
 
-				xhr.open("POST", "pano-upload.php", true);
-				
-				xhr.onreadystatechange = function() {
-					if (xhr.readyState == 4 && xhr.status == 200) {
-						// console.log(xhr.responseText);
-					}
-				}
+			var zip = new JSZip();
+			var paths = [];
 
-				for (var i = 0, file; file = files[i]; i++) {
-					
-					// if(~file.webkitRelativePath.indexOf(".tiles")) { //only upload files inside a .tiles folder
-						// console.log(file.webkitRelativePath);	
-						paths += file.webkitRelativePath+"###";
-						fd.append("file_"+i, file);	
-					// }
-				}
-				// console.log(paths);
-				// console.log("server: ");
-				fd.append("paths", paths);
-
-
-				
-				xhr.upload.addEventListener("progress", function(e) {
-					// console.log(Math.round(e.loaded / e.total * 100) +"% loaded");
-				});
-				xhr.send(fd);
+			for (var i = 0, file; file = files[i]; i++) {				
+			    // console.log(file.name);
+			    zip.file(file.name, file);	
+			    // zip.folder //change directory // possible to pass multiple dirs in?
+			}
+			console.log(zip);
+			zip.generateAsync({type:"blob"}).then(function (content) {
+				fd.append('zipTest1',content,'zipTest1.zip');	
+			});
 			
+
+			xhr.upload.addEventListener("progress", function(e) {
+				// console.log(Math.round(e.loaded / e.total * 100) +"% loaded");
+			});
+			xhr.send(fd);	
 		});
-
-		var panoForm = document.getElementById('panoForm');
-
-		panoForm.addEventListener('submit', function(e) {
-			e.preventDefault();
-			e.stopPropagation();
-
-			var files = document.getElementById('files').files;
-
-			console.log(files);
-			
-
-
-		});
+		// var panoForm = document.getElementById('panoForm');
+		// panoForm.addEventListener('submit', function(e) {
+		// 	e.preventDefault();
+		// 	e.stopPropagation();
+		// 	var files = document.getElementById('files').files;
+		// 	console.log(files);
+		// });
 	});
 
 })( jQuery );
