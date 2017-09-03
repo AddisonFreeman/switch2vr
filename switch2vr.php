@@ -34,7 +34,9 @@ function switch2VR_admin(){
 function switch2vr_admin_page_init(){
 	echo "<h1> Switch2VR Admin Page </h1>";
 	// echo '<div id="wrapper"><input id="fileUpload" type="file" /><br /><div id="image-holder"></div></div>';
-	include 'upload.html';
+	include 'upload-pano.php';
+	//read server project files and display projects with create new option
+
 	// echo php_ini_loaded_file();
 	// echo phpinfo();
 	// exec("./krpano/krpanotools makepano -config=./krpano/templates/vtour-normal.config ./krpano-demos/cube.jpg");
