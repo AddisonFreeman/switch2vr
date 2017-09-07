@@ -16,9 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 	// 	array_push($path_index_array, $file_from_path);
 	// }
 	echo 'start';
-	echo $_FILES['zipTest1']['name'];
+	file_put_contents( 'debug' . time() . '.log', var_export( $_FILES, true));
     
-    // foreach ($_FILES as $i => $file) {
+    foreach ($_FILES as $i => $file) {
  		// echo $file['name'];
         
    //      if (strlen($_FILES[$i]['name']) > 1) {
@@ -29,14 +29,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 			// if(!is_dir(__DIR__."/../wp-content/vtour/projects/test/".$dir_path)) { //don't make dir if end file
 			// 	mkdir(__DIR__."/../wp-content/vtour/projects/test/".$dir_path, 0777, true);
-			// 	if (move_uploaded_file($_FILES[$i]['tmp_name'], __DIR__ . "/../wp-content/vtour/projects/test/".$dir_path.$file['name'])) {
-   //              	echo 'uploaded '.$file['name'].' at '.'\'wp-content/vtour/projects/test/'.$dir_path.'\'';
-   //          	}
+			echo __DIR__;
+				if (move_uploaded_file($file['tmp_name'],__DIR__ . "/../wp-content/plugins/switch2vr/panos/".$file['name'])) {
+                	echo 'uploaded '.$file['name'].' at '.'\'/../wp-content/plugins/switch2vr/panos/\'';
+                	$zip = new ZipArchive;
+					if($zip->open(__DIR__ . "/../wp-content/plugins/switch2vr/panos/".$file['name']) === TRUE) {
+						$zip->extractTo( __DIR__ . "/../wp-content/plugins/switch2vr/panos/" );
+						$zip->close();
+					}
+					unlink(__DIR__ . "/../wp-content/plugins/switch2vr/panos/".$file['name']);
+					unlink(__DIR__ . "/../wp-content/plugins/switch2vr/panos/__MACOSX");
+            	}
+
+				
+
+			
 			// }
 
 
    //      }
-    // }
+    }
 }
 
 // mkdir(__DIR__ . "/../wp-content/vtour/projects/" . $pano_name);

@@ -43,7 +43,16 @@
 			alert('XHR HTTP Requests not supported by your browser');
 		}
 
-		
+		xhr.onreadystatechange = function() {
+			if(xhr.readystate==4 && xhr.status==200) {
+				var data = $.parseJSON(xhr.responseText);
+				var uploadResult = data['message'];
+				if(uploadResult=='success') {
+					$('#wpbody').load('../wp-content/plugins/switch2vr/upload-pano.php');
+				}
+			}
+		}
+
 		var filesEl = document.getElementById('files');
 
 		filesEl.addEventListener('dragover', function(event) {
@@ -56,32 +65,35 @@
 			e.preventDefault();
 
 			var files = e.target.files;
-			// var paths = "";
-			
 			var fd = new FormData();
 			var xhr = new XMLHttpRequest();
 
 			xhr.open("POST", "pano-upload.php", true);
-
-			var zip = new JSZip();
-			var paths = [];
-
-			for (var i = 0, file; file = files[i]; i++) {				
-			    // console.log(file.name);
-			    zip.file(file.name, file);	
+			console.log(files[0].name);
+			console.log(files[0]);		    	
+			fd.append(files[0].name, files[0]);
 			    // zip.folder //change directory // possible to pass multiple dirs in?
-			}
-			console.log(zip);
-			zip.generateAsync({type:"blob"}).then(function (content) {
-				fd.append('zipTest1',content,'zipTest1.zip');	
-			});
-			
 
 			xhr.upload.addEventListener("progress", function(e) {
 				// console.log(Math.round(e.loaded / e.total * 100) +"% loaded");
 			});
 			xhr.send(fd);	
+			//ajax refresh page
 		});
+
+
+
+		$('.show-code').click(function(e) {
+			if($(e.target).siblings('.pano-embed').css("display") == "none") {
+				$(e.target).html('Hide Embed Code');
+				$(e.target).siblings('.pano-embed').show();	
+			} else {
+				$(e.target).html('Show Embed Code');
+				$(e.target).siblings('.pano-embed').hide();	
+			}
+			
+		});
+
 		// var panoForm = document.getElementById('panoForm');
 		// panoForm.addEventListener('submit', function(e) {
 		// 	e.preventDefault();
